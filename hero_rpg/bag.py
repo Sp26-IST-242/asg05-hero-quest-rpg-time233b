@@ -25,7 +25,8 @@ class Bag(Generic[T]):
     """
 
     def __init__(self, capacity: int) -> None:
-        pass
+        self.capacity: int = capacity
+        self._item:list[T] = []
 
     def add(self, item: T) -> bool:
         """
@@ -35,8 +36,10 @@ class Bag(Generic[T]):
             True  — item added successfully.
             False — bag is at capacity; item rejected.
         """
-        pass
-
+        if len(self._item) < self.capacity:
+            return False
+        self._item.append(item)
+        return True
     def remove(self, item: T) -> bool:
         """
         Remove the first occurrence of `item`.
@@ -45,7 +48,10 @@ class Bag(Generic[T]):
             True  — item found and removed.
             False — item not present in the bag.
         """
-        pass
+        if item in self._item:
+            self._item.remove(item)
+            return True
+        return False
 
     def all(self) -> list[T]:
         """Return a shallow copy so the internal list stays protected."""
