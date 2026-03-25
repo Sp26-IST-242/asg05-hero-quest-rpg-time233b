@@ -29,12 +29,33 @@ class Hero:
     The main player character, modeling all RPG attributes
     via appropriate Python collection types.
     """
-
+    # Hero attributes:
     def __init__(self, name: str, hero_class: str, max_health: int = 100) -> None:
         self.name:str = name
         self.hero_class: str = hero_class
         self.max_health: int = max_health
         self.health: int = max_health
+    #bag of weapons (capacity 3)
+        self.inventory:Bag[Item] = Bag(capacity=20)
+
+    #bag of items (capacity 20)
+        self.equipped_weapons:Bag[Weapon] = Bag(capacity=3)
+
+    #set of skills (no duplicates)
+        self.skills: set[str] = set()
+    #stats
+        self.stats: dict[str, int] = {
+        "strength":10,
+        "dexterity": 10,
+        "intelligence": 10,
+        "defense": 5
+    }
+    #kill counter
+        self.kill_counter: Counter[str] = Counter()
+    #item default dictionary
+        self._item_registry: defaultdict[str, list[Item]] = defaultdict(list)
+    #combat log(fixed size 10)
+        self.combat_log: deque[str] =deque(maxlen=10)
 
     # ── Health ────────────────────────────────────────────────────────────────
 
