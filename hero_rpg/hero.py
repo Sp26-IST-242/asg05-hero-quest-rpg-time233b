@@ -104,6 +104,10 @@ class Hero:
             True if equipped; False if weapon slots are full.
         """
         success: bool =self.equipped_weapons.add(weapon) # techinical debt
+        if success:
+            self.combat_log.append(
+                f"{self.name} equipped {weapon.name}"
+            )
         return success
 
     def learn_skill(self, skill: str) -> bool:
@@ -113,7 +117,9 @@ class Hero:
         Returns:
             True if new skill; False if already known.
         """
-        pass
+        if skill in self.skills:
+            return False
+        self.skills.add(skill)
 
     # ── Inventory ─────────────────────────────────────────────────────────────
 
@@ -124,14 +130,20 @@ class Hero:
         Returns:
             True if added; False if inventory is full.
         """
-        pass
+        success: bool =self.inventory.add(item) # techinical debt
+        if success:
+            self.combat_log.append(
+                f"{self.name} added {item.name}"
+            )
+            self._item_registry[item.item_type].append(item)
+        return success
 
     def items_by_type(self) -> dict[str, list[Item]]:
         """
         Return items grouped by ItemType name as a plain dict copy.
         Callers cannot mutate the internal defaultdict directly.
         """
-        pass
+        return dict(self._item_registry)
 
     # ── Combat & Kill Tracking ────────────────────────────────────────────────
 
@@ -143,8 +155,13 @@ class Hero:
         pass
 
     def total_damage_potential(self) -> int:
-        """Sum damage of all currently equipped weapons."""
-        pass
+        """Sum damage of all currently equipped weapons.
+        """  
+        damage : int= 0
+        for x in self.equipped_weapons.all():
+             damage += x.damage
+             return damage 
+            
 
     def top_kills(self, n: int = 3) -> list[tuple[str, int]]:
         """
