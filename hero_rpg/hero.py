@@ -68,6 +68,10 @@ class Hero:
         """
         actual: int = min(self.health , amount)
         self. health -= actual
+        self.combat_log.append(
+            f"{self.name} took {actual} damage"
+            f"HP: {self.health}/{self.max_health}"
+        )
         return actual 
 
     def heal(self, amount: int) -> int:
@@ -77,6 +81,13 @@ class Hero:
         Returns:
             Actual HP restored (may be less if already near full).
         """
+        actual: int = min(self.max_health - self. health, amount)
+        self.health += actual
+        self.combat_log.append(
+            f"{self.name} healed {actual} HP"
+            f"HP: {self.health}/{self.max_health}"
+        )
+        return actual
         
 
     def is_alive(self) -> bool:
@@ -92,7 +103,8 @@ class Hero:
         Returns:
             True if equipped; False if weapon slots are full.
         """
-        pass
+        success: bool =self.equipped_weapons.add(weapon) # techinical debt
+        return success
 
     def learn_skill(self, skill: str) -> bool:
         """
