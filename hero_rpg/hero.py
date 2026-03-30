@@ -55,7 +55,7 @@ class Hero:
     #item default dictionary
         self._item_registry: defaultdict[str, list[Item]] = defaultdict(list)
     #combat log(fixed size 10)
-        self.combat_log: deque[str] =deque(maxlen=10)
+        self.combat_log: deque[str] = deque(maxlen =10)
 
     # ── Health ────────────────────────────────────────────────────────────────
 
@@ -66,7 +66,9 @@ class Hero:
         Returns:
             Actual HP lost (may be less than `amount` near death).
         """
-        pass
+        actual: int = min(self.health , amount)
+        self. health -= actual
+        return actual 
 
     def heal(self, amount: int) -> int:
         """
@@ -75,7 +77,7 @@ class Hero:
         Returns:
             Actual HP restored (may be less if already near full).
         """
-        pass
+        
 
     def is_alive(self) -> bool:
         """Return True as long as health is above zero."""
