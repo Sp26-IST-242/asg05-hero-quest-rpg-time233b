@@ -69,7 +69,7 @@ class Hero:
         actual: int = min(self.health , amount)
         self. health -= actual
         self.combat_log.append(
-            f"{self.name} took {actual} damage"
+            f"{self.name} took {actual} damage. "
             f"HP: {self.health}/{self.max_health}"
         )
         return actual 
@@ -120,6 +120,7 @@ class Hero:
         if skill in self.skills:
             return False
         self.skills.add(skill)
+        return True
 
     # ── Inventory ─────────────────────────────────────────────────────────────
 
@@ -135,7 +136,7 @@ class Hero:
             self.combat_log.append(
                 f"{self.name} added {item.name}"
             )
-            self._item_registry[item.item_type].append(item)
+            self._item_registry[item.item_type.value].append(item)
         return success
 
     def items_by_type(self) -> dict[str, list[Item]]:
@@ -153,6 +154,10 @@ class Hero:
         Counter accumulates each enemy type; no manual initialization needed.
         """
         self.kill_counter[enemy_type] += 1
+        self.combat_log.append(
+            f"{self.name} defeated a {enemy_type}! "
+            f"(Total {enemy_type} kills: {self.kill_counter[enemy_type]})"
+        )
  
     def total_damage_potential(self) -> int:
         """Sum damage of all currently equipped weapons.
@@ -160,7 +165,7 @@ class Hero:
         damage : int= 0
         for x in self.equipped_weapons.all():
              damage += x.damage
-             return damage 
+        return damage 
             
 
     def top_kills(self, n: int = 3) -> list[tuple[str, int]]:
@@ -168,7 +173,7 @@ class Hero:
         Return the top N most-killed enemy types.
         Counter.most_common() returns them in descending order of count.
         """
-        pass
+        return self.kill_counter.most_common(n)
 
     # ── Stats ─────────────────────────────────────────────────────────────────
 
@@ -179,7 +184,12 @@ class Hero:
         Returns:
             True if stat exists and was upgraded; False if key not found.
         """
-        pass
+        if stat not in self.stats:
+            return False
+        self.stats[stat] += amount
+        return True
+
+        
 
     def __repr__(self) ->str:
         return f" Hero(name={self.name})" f", class={self.hero_class}" f", HP={self.health}/{self.max_health}"
